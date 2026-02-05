@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# 🧩 Logic Grid — A Sudoku-Inspired Logic Puzzle
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Logic Grid is a **web-based logic puzzle game** inspired by Sudoku, designed to challenge users’ logical reasoning and pattern recognition skills.  
+The application is built with **React** and **TypeScript**, emphasizing clean architecture, type safety, and a modern frontend development workflow.
 
-Currently, two official plugins are available:
+🔗 **Live Demo**: https://sudoku-zeta-blue.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Key Highlights
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🧠 **Logic-driven gameplay** inspired by classic Sudoku mechanics  
+- ⚛️ **React-based component architecture** for scalability and reusability  
+- 🟦 **TypeScript-first implementation** ensuring robustness and maintainability  
+- 🎯 **Deterministic game logic** with clear separation of concerns  
+- 📱 **Responsive UI** optimized for desktop and mobile  
+- ☁️ **Production-ready deployment** on Vercel with CI/CD integration  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Layer        | Technology |
+|-------------|------------|
+| Frontend     | React |
+| Language     | TypeScript |
+| Styling      | CSS |
+| Build Tool   | Vite |
+| Deployment   | Vercel |
+| Version Control | Git & GitHub |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🧩 Architecture Overview
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The project follows a **modular and maintainable structure**, separating UI components, core logic, and utilities.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
