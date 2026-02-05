@@ -1,10 +1,14 @@
 import React from 'react';
 import { Grid } from './Grid/Grid';
-import { HUD, Controls } from './HUD/HUD';
-import { RuleList } from './RuleList';
+import { HUD } from './HUD/HUD';
+import { Controls } from './HUD/Controls';
+import { RuleList } from './RuleList/RuleList';
 import { GameModal } from './Modal/GameModal';
+import { useGameStore } from '../store/useGameStore';
 
 export const GameLayout: React.FC = () => {
+    const level = useGameStore(state => state.level);
+
     return (
         <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
             {/* Background Effects */}
@@ -25,7 +29,7 @@ export const GameLayout: React.FC = () => {
             <div className="flex flex-col md:flex-row items-start gap-8 mt-4">
                 <div className="flex-1">
                     <Grid />
-                    <Controls />
+                    <Controls key={level?.difficulty} />
                 </div>
 
                 <div className="hidden md:block w-72">

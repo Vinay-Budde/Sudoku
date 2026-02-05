@@ -1,8 +1,9 @@
 
 import { useState } from 'react';
-import { useGameStore } from '../store/useGameStore';
+import { useGameStore } from '../../store/useGameStore';
 import { motion } from 'framer-motion';
 import { Play, Brain, Cpu, Zap, Star } from 'lucide-react';
+import { DifficultyCard } from './DifficultyCard';
 
 export const LandingPage = () => {
     const startGame = useGameStore(state => state.startGame);
@@ -12,38 +13,47 @@ export const LandingPage = () => {
         startGame(difficulty);
     };
 
-    const difficulties = [
-        {
-            id: 'easy',
-            label: 'Initiate',
-            sub: '4x4 Grid',
-            icon: Brain,
-            color: 'text-emerald-400',
-            border: 'border-emerald-500/50',
-            bg: 'bg-emerald-500/10 hover:bg-emerald-500/20',
-            desc: 'For beginners. Learn the patterns.'
-        },
-        {
-            id: 'medium',
-            label: 'Advanced',
-            sub: '5x5 Grid',
-            icon: Cpu,
-            color: 'text-cyan-400',
-            border: 'border-cyan-500/50',
-            bg: 'bg-cyan-500/10 hover:bg-cyan-500/20',
-            desc: 'A true test of deductive reasoning.'
-        },
-        {
-            id: 'hard',
-            label: 'Master',
-            sub: '6x6 Grid',
-            icon: Zap,
-            color: 'text-rose-400',
-            border: 'border-rose-500/50',
-            bg: 'bg-rose-500/10 hover:bg-rose-500/20',
-            desc: 'Only for the sharpest minds.'
-        }
-    ];
+    const difficulties: {
+        id: 'easy' | 'medium' | 'hard';
+        label: string;
+        sub: string;
+        icon: typeof Brain;
+        color: string;
+        border: string;
+        bg: string;
+        desc: string;
+    }[] = [
+            {
+                id: 'easy',
+                label: 'Initiate',
+                sub: '4x4 Grid',
+                icon: Brain,
+                color: 'text-emerald-400',
+                border: 'border-emerald-500/50',
+                bg: 'bg-emerald-500/10 hover:bg-emerald-500/20',
+                desc: 'For beginners. Learn the patterns.'
+            },
+            {
+                id: 'medium',
+                label: 'Advanced',
+                sub: '5x5 Grid',
+                icon: Cpu,
+                color: 'text-cyan-400',
+                border: 'border-cyan-500/50',
+                bg: 'bg-cyan-500/10 hover:bg-cyan-500/20',
+                desc: 'A true test of deductive reasoning.'
+            },
+            {
+                id: 'hard',
+                label: 'Master',
+                sub: '6x6 Grid',
+                icon: Zap,
+                color: 'text-rose-400',
+                border: 'border-rose-500/50',
+                bg: 'bg-rose-500/10 hover:bg-rose-500/20',
+                desc: 'Only for the sharpest minds.'
+            }
+        ];
 
     return (
         <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -76,41 +86,14 @@ export const LandingPage = () => {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="w-full max-w-4xl grid md:grid-cols-3 gap-6 z-10 px-4"
             >
-                {difficulties.map((diff) => {
-                    const Icon = diff.icon;
-                    const isSelected = difficulty === diff.id;
-                    return (
-                        <button
-                            key={diff.id}
-                            onClick={() => setDifficulty(diff.id as any)}
-                            className={`relative group p-6 rounded-2xl border transition-all duration-300 text-left ${isSelected
-                                ? `${diff.bg} ${diff.border} shadow-[0_0_30px_rgba(0,0,0,0.3)] scale-105`
-                                : 'bg-slate-900/40 border-slate-800 hover:border-slate-700 hover:bg-slate-800/40'
-                                } backdrop-blur-md`}
-                        >
-                            <div className={`p-3 rounded-xl inline-block mb-4 ${isSelected ? 'bg-black/20' : 'bg-slate-800/50'}`}>
-                                <Icon size={32} className={diff.color} />
-                            </div>
-                            <h3 className={`text-2xl font-bold mb-1 ${isSelected ? 'text-white' : 'text-slate-300'}`}>
-                                {diff.label}
-                            </h3>
-                            <div className="text-sm font-mono text-slate-500 mb-4">{diff.sub}</div>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                {diff.desc}
-                            </p>
-
-                            {/* Selection indicator */}
-                            {isSelected && (
-                                <motion.div
-                                    layoutId="outline"
-                                    className={`absolute inset-0 rounded-2xl border-2 ${diff.border} pointer-events-none`}
-                                    initial={false}
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
-                            )}
-                        </button>
-                    )
-                })}
+                {difficulties.map((diff) => (
+                    <DifficultyCard
+                        key={diff.id}
+                        diff={diff}
+                        isSelected={difficulty === diff.id}
+                        onSelect={setDifficulty}
+                    />
+                ))}
             </motion.div>
 
             <motion.div

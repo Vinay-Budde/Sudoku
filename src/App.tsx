@@ -1,5 +1,5 @@
 import { GameLayout } from './components/GameLayout';
-import { LandingPage } from './components/LandingPage';
+import { LandingPage } from './components/LandingPage/LandingPage';
 import { useGameStore } from './store/useGameStore';
 
 function App() {

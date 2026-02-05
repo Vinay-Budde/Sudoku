@@ -155,14 +155,14 @@ export const useGameStore = create<GameState & GameActions>()(
             setStatus: (status) => set({ status })
         }),
         {
-            name: 'logic-grid-game-storage', // name of the item in the storage (must be unique)
+            name: 'logic-grid-game-storage-v2', // name of the item in the storage (must be unique)
             partialize: (state) => ({
                 // Persist everything except history if large? 
                 // For now persist minimal state.
                 level: state.level,
                 timer: state.timer,
                 moves: state.moves,
-                status: state.status,
+                // status: state.status, // Don't persist status to force landing page on reload
                 grid: state.grid
             }),
         }
