@@ -11,7 +11,7 @@ export interface Cell {
 
 export type Grid = Cell[][];
 
-export type RuleType = 'row_unique' | 'col_unique' | 'adjacency' | 'sum_match' | 'pattern';
+export type RuleType = 'row_unique' | 'col_unique' | 'adjacency' | 'sum_match' | 'pattern' | 'subgrid_unique';
 
 export interface Rule {
     id: string;
@@ -27,7 +27,7 @@ export interface LevelConfig {
     size: number; // Grid size NxN
     rules: Rule[];
     targetMoves: number;
-    difficulty: 'easy' | 'medium' | 'hard';
+    difficulty: 'easy' | 'medium' | 'hard' | 'expert';
 }
 
 export interface GameState {
@@ -38,4 +38,7 @@ export interface GameState {
     timer: number;
     moves: number;
     history: Grid[]; // Stack for undo
+    selectedCell: { r: number; c: number } | null;
+    bestTimes: Record<string, number>;
+    isNewRecord: boolean;
 }

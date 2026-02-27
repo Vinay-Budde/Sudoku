@@ -7,14 +7,14 @@ import { DifficultyCard } from './DifficultyCard';
 
 export const LandingPage = () => {
     const startGame = useGameStore(state => state.startGame);
-    const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
+    const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'expert'>('easy');
 
     const handleStart = () => {
         startGame(difficulty);
     };
 
     const difficulties: {
-        id: 'easy' | 'medium' | 'hard';
+        id: 'easy' | 'medium' | 'hard' | 'expert';
         label: string;
         sub: string;
         icon: typeof Brain;
@@ -52,6 +52,16 @@ export const LandingPage = () => {
                 border: 'border-rose-500/50',
                 bg: 'bg-rose-500/10 hover:bg-rose-500/20',
                 desc: 'Only for the sharpest minds.'
+            },
+            {
+                id: 'expert',
+                label: 'Expert',
+                sub: '9x9 Sudoku',
+                icon: Star,
+                color: 'text-yellow-400',
+                border: 'border-yellow-500/50',
+                bg: 'bg-yellow-500/10 hover:bg-yellow-500/20',
+                desc: 'Classic Sudoku rules with 3x3 blocks.'
             }
         ];
 
@@ -84,7 +94,7 @@ export const LandingPage = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="w-full max-w-4xl grid md:grid-cols-3 gap-6 z-10 px-4"
+                className="w-full max-w-5xl grid md:grid-cols-4 gap-4 md:gap-6 z-10 px-4"
             >
                 {difficulties.map((diff) => (
                     <DifficultyCard

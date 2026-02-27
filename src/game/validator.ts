@@ -6,6 +6,8 @@ export function validateRule(grid: Grid, rule: Rule): boolean {
             return checkUnique(grid, 'row');
         case 'col_unique':
             return checkUnique(grid, 'col');
+        case 'subgrid_unique':
+            return checkSubgridUnique(grid);
         default:
             console.warn(`Unknown rule type: ${rule.type}`);
             return true; // Default to true to avoid blocking
@@ -43,6 +45,30 @@ function checkUnique(grid: Grid, mode: 'row' | 'col'): boolean {
     return true;
 }
 
+function checkSubgridUnique(grid: Grid): boolean {
+    const size = grid.length;
+    if (size !== 9) return true; // Only applies to 9x9
+
+    for (let br = 0; br < 3; br++) {
+        for (let bc = 0; bc < 3; bc++) {
+            const seen = new Set<number>();
+            let filledCount = 0;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    const val = grid[br * 3 + i][bc * 3 + j].value;
+                    if (val !== null) {
+                        if (seen.has(val)) return false;
+                        seen.add(val);
+                        filledCount++;
+                    }
+                }
+            }
+            if (filledCount !== 9) return false;
+        }
+    }
+    return true;
+}
+
 // Check for errors to display UI feedback (red cells)
 export function checkErrors(grid: Grid): Set<string> {
     const errorIds = new Set<string>();
@@ -69,8 +95,8 @@ export function checkErrors(grid: Grid): Set<string> {
     // Col Duplicates
     for (let c = 0; c < size; c++) {
         const counts = new Map<number, string[]>();
-        for (let r = 0; r < size; r++) {
-            const cell = grid[r][c];
+        for (let rowIdx = 0; rowIdx < size; rowIdx++) {
+            const cell = grid[rowIdx][c];
             if (cell.value !== null) {
                 const existing = counts.get(cell.value) || [];
                 existing.push(cell.id);
@@ -80,6 +106,29 @@ export function checkErrors(grid: Grid): Set<string> {
         for (const ids of counts.values()) {
             if (ids.length > 1) {
                 ids.forEach(id => errorIds.add(id));
+            }
+        }
+    }
+
+    if (size === 9) {
+        for (let br = 0; br < 3; br++) {
+            for (let bc = 0; bc < 3; bc++) {
+                const counts = new Map<number, string[]>();
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        const cell = grid[br * 3 + i][bc * 3 + j];
+                        if (cell.value !== null) {
+                            const existing = counts.get(cell.value) || [];
+                            existing.push(cell.id);
+                            counts.set(cell.value, existing);
+                        }
+                    }
+                }
+                for (const ids of counts.values()) {
+                    if (ids.length > 1) {
+                        ids.forEach(id => errorIds.add(id));
+                    }
+                }
             }
         }
     }

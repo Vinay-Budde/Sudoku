@@ -4,7 +4,7 @@ import { useGameStore } from '../../store/useGameStore';
 import { Trophy, RefreshCw } from 'lucide-react';
 
 export const GameModal: React.FC = () => {
-    const { status, level, startGame, moves, timer } = useGameStore();
+    const { status, level, startGame, moves, timer, isNewRecord } = useGameStore();
 
     // Only show for 'won' or 'lost' state
     const isVisible = status === 'won' || status === 'lost';
@@ -37,11 +37,22 @@ export const GameModal: React.FC = () => {
                                 initial={{ rotate: -10, scale: 0 }}
                                 animate={{ rotate: 0, scale: 1 }}
                                 transition={{ delay: 0.2 }}
+                                className="relative"
                             >
                                 <Trophy size={64} className="text-yellow-400 mb-4 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]" />
+                                {isNewRecord && (
+                                    <motion.div
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ delay: 0.6, type: "spring" }}
+                                        className="absolute -top-2 -right-6 bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] animate-pulse"
+                                    >
+                                        NEW RECORD
+                                    </motion.div>
+                                )}
                             </motion.div>
                             <h2 className="text-3xl font-bold text-white mb-2">Level Complete!</h2>
-                            <p className="text-slate-400 mb-6">Excellent logical deduction.</p>
+                            <p className="text-slate-400 mb-6">{isNewRecord ? "Incredible speed! A new personal best." : "Excellent logical deduction."}</p>
 
                             <div className="grid grid-cols-2 gap-4 w-full mb-8">
                                 <div className="bg-slate-800 p-3 rounded-lg">

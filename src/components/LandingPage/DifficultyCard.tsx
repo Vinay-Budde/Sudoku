@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
 
 interface DifficultyConfig {
-    id: 'easy' | 'medium' | 'hard';
+    id: 'easy' | 'medium' | 'hard' | 'expert';
     label: string;
     sub: string;
     icon: LucideIcon;
@@ -16,7 +16,7 @@ interface DifficultyConfig {
 interface DifficultyCardProps {
     diff: DifficultyConfig;
     isSelected: boolean;
-    onSelect: (id: 'easy' | 'medium' | 'hard') => void;
+    onSelect: (id: 'easy' | 'medium' | 'hard' | 'expert') => void;
 }
 
 export const DifficultyCard: React.FC<DifficultyCardProps> = ({ diff, isSelected, onSelect }) => {

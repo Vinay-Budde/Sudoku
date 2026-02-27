@@ -5,13 +5,15 @@ import { generateLevel } from '../game/generator';
 import { validateRule, checkErrors } from '../game/validator';
 
 interface GameActions {
-    startGame: (difficulty?: 'easy' | 'medium' | 'hard') => void;
+    startGame: (difficulty?: 'easy' | 'medium' | 'hard' | 'expert') => void;
     setCellValue: (row: number, col: number, value: number | null) => void;
     checkWinCondition: () => void;
     undo: () => void;
     resetLevel: () => void;
     tickTimer: () => void;
     setStatus: (status: GameState['status']) => void;
+    setSelectedCell: (r: number | null, c: number | null) => void;
+    clearRecordFlag: () => void;
 }
 
 // Helper to deep copy grid
@@ -28,14 +30,18 @@ export const useGameStore = create<GameState & GameActions>()(
             timer: 0,
             moves: 0,
             history: [],
+            selectedCell: null,
+            bestTimes: {},
+            isNewRecord: false,
 
             startGame: (difficulty = 'easy') => {
                 const sizeMap = {
                     easy: 4,
                     medium: 5,
-                    hard: 6
+                    hard: 6,
+                    expert: 9
                 };
-                const size = sizeMap[difficulty];
+                const size = sizeMap[difficulty as keyof typeof sizeMap];
                 const { level, initialGrid } = generateLevel(size, difficulty);
                 set({
                     grid: initialGrid,
@@ -44,7 +50,9 @@ export const useGameStore = create<GameState & GameActions>()(
                     status: 'playing',
                     timer: 0,
                     moves: 0,
-                    history: [] // Reset history
+                    history: [], // Reset history
+                    selectedCell: null,
+                    isNewRecord: false
                 });
             },
 
@@ -141,7 +149,19 @@ export const useGameStore = create<GameState & GameActions>()(
                 const allRulesSatisfied = rules.every(rule => validateRule(grid, rule));
 
                 if (allRulesSatisfied) {
-                    set({ status: 'won' });
+                    const { level, timer, bestTimes } = get();
+                    let isNewRecord = false;
+                    const newBestTimes = { ...bestTimes };
+
+                    if (level && level.difficulty) {
+                        const currentBest = bestTimes[level.difficulty];
+                        if (currentBest === undefined || timer < currentBest) {
+                            newBestTimes[level.difficulty] = timer;
+                            isNewRecord = true;
+                        }
+                    }
+
+                    set({ status: 'won', bestTimes: newBestTimes, isNewRecord });
                 }
             },
 
@@ -152,7 +172,17 @@ export const useGameStore = create<GameState & GameActions>()(
                 }
             },
 
-            setStatus: (status) => set({ status })
+            setStatus: (status) => set({ status }),
+
+            setSelectedCell: (r, c) => {
+                if (r === null || c === null) {
+                    set({ selectedCell: null });
+                } else {
+                    set({ selectedCell: { r, c } });
+                }
+            },
+
+            clearRecordFlag: () => set({ isNewRecord: false })
         }),
         {
             name: 'logic-grid-game-storage-v2', // name of the item in the storage (must be unique)
@@ -163,7 +193,8 @@ export const useGameStore = create<GameState & GameActions>()(
                 timer: state.timer,
                 moves: state.moves,
                 // status: state.status, // Don't persist status to force landing page on reload
-                grid: state.grid
+                grid: state.grid,
+                bestTimes: state.bestTimes
             }),
         }
     )

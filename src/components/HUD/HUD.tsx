@@ -5,7 +5,8 @@ import { clsx } from 'clsx';
 import { motion } from 'framer-motion';
 
 export const HUD: React.FC = () => {
-    const { timer, moves, level, tickTimer, status } = useGameStore();
+    const { timer, moves, level, tickTimer, status, bestTimes } = useGameStore();
+    const bestTime = level ? bestTimes[level.difficulty] : undefined;
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -31,7 +32,14 @@ export const HUD: React.FC = () => {
                     <Timer size={22} className="text-indigo-400" />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Time</span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Time</span>
+                        {bestTime !== undefined && (
+                            <span className="text-[9px] text-emerald-400/80 font-bold uppercase tracking-widest bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                                Best: {formatTime(bestTime)}
+                            </span>
+                        )}
+                    </div>
                     <span className="font-mono text-xl text-indigo-100 font-bold leading-none">{formatTime(timer)}</span>
                 </div>
             </div>

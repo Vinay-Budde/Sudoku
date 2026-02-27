@@ -9,6 +9,10 @@ export const RULES: Record<string, Omit<Rule, 'id' | 'isSatisfied'>> = {
         type: 'col_unique',
         description: 'Each number must appear exactly once in each column.',
     },
+    SUBGRID_UNIQUE: {
+        type: 'subgrid_unique',
+        description: 'Each number must appear exactly once in each 3x3 subgrid.',
+    },
     // Future rules: Adjacency, Sum, etc.
 };
 
